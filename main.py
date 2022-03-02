@@ -15,7 +15,7 @@ class BulkEdit(AddOn):
     def main(self):
 
         attrs = ["source", "description", "related_article", "published_url"]
-        data = {a: self.data[a] for a in attrs}
+        data = {a: self.data[a] for a in attrs if a in self.data}
 
         # fetch 25 documents at a time, and bulk edit them in one call
         documents = self.client.documents.search(self.query, per_page=BULK_LIMIT)
