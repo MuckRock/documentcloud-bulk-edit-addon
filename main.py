@@ -2,6 +2,7 @@
 This DocumentCloud Add-On allows you to bulk edit documents
 """
 
+from documentcloud.exceptions import APIError
 from documentcloud.toolbox import grouper
 
 from addon import AddOn
@@ -20,9 +21,13 @@ class BulkEdit(AddOn):
         # fetch 25 documents at a time, and bulk edit them in one call
         documents = self.client.documents.search(self.query, per_page=BULK_LIMIT)
         for page_documents in grouper(documents, BULK_LIMIT):
-            response = self.client.patch(
-                "documents/", json=[{"id": d.id, **data} for d in page_documents]
-            )
+            try:
+                response = self.client.patch(
+                    "documents/", json=[{"id": d.id, **data} for d in page_documents]
+                )
+            except APIError as exc:
+                self.set_message(f"Error: {exc.error}")
+                raise
 
 
 if __name__ == "__main__":
