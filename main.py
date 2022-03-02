@@ -1,46 +1,29 @@
 """
-This is a hello world add-on for DocumentCloud.
-
-It demonstrates how to write a add-on which can be activated from the
-DocumentCloud add-on system and run using Github Actions.  It receives data
-from DocumentCloud via the request dispatch and writes data back to
-DocumentCloud using the standard API
+This DocumentCloud Add-On allows you to bulk edit documents
 """
+
+from documentcloud.toolbox import grouper
 
 from addon import AddOn
 
+BULK_LIMIT = 25
 
-class HelloWorld(AddOn):
-    """An example Add-On for DocumentCloud."""
+
+class BulkEdit(AddOn):
+    """Bulk edit DocumentCloud documents"""
 
     def main(self):
-        """The main add-on functionality goes here."""
-        # fetch your add-on specific data
-        name = self.data.get("name", "world")
 
-        self.set_message("Hello World start!")
+        attrs = ["source", "description", "related_article", "published_url"]
+        data = {a: self.data[a] for a in attrs}
 
-        # add a hello note to the first page of each selected document
-        if self.documents:
-            length = len(self.documents)
-            for i, doc_id in enumerate(self.documents):
-                self.set_progress(100 * i // length)
-                document = self.client.documents.get(doc_id)
-                document.annotations.create(f"Hello {name}!", 0)
-        elif self.query:
-            documents = self.client.documents.search(self.query)
-            length = len(documents)
-            for i, document in enumerate(documents):
-                self.set_progress(100 * i // length)
-                document.annotations.create(f"Hello {name}!", 0)
-
-        with open("hello.txt", "w+") as file_:
-            file_.write("Hello world!")
-            self.upload_file(file_)
-
-        self.set_message("Hello World end!")
-        self.send_mail("Hello World!", "We finished!")
+        # fetch 25 documents at a time, and bulk edit them in one call
+        documents = self.client.documents.search(self.query, per_page=BULK_LIMIT)
+        for page_documents in grouper(documents, BULK_LIMIT):
+            response = self.client.patch(
+                "documents/", json=[{"id": d.id, **data} for d in page_documents]
+            )
 
 
 if __name__ == "__main__":
-    HelloWorld().main()
+    BulkEdit().main()
