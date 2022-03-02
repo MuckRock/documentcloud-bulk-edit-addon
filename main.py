@@ -23,7 +23,10 @@ class BulkEdit(AddOn):
         for page_documents in grouper(documents, BULK_LIMIT):
             try:
                 response = self.client.patch(
-                    "documents/", json=[{"id": d.id, **data} for d in page_documents]
+                    "documents/",
+                    json=[
+                        {"id": d.id, **data} for d in page_documents if d is not None
+                    ],
                 )
             except APIError as exc:
                 self.set_message(f"Error: {exc.error}")
