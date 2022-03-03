@@ -2,10 +2,9 @@
 This DocumentCloud Add-On allows you to bulk edit documents
 """
 
+from documentcloud.addon import AddOn
 from documentcloud.exceptions import APIError
 from documentcloud.toolbox import grouper
-
-from addon import AddOn
 
 BULK_LIMIT = 25
 
