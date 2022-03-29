@@ -4,6 +4,7 @@ description: >-
   search.  Please be sure you have edit access to these documents before running
   this add-on.
 type: object
+documents: query
 properties:
   description:
     title: Description
