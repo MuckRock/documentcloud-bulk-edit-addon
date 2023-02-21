@@ -18,7 +18,7 @@ class BulkEdit(SoftTimeOutAddOn):
         data = {a: self.data[a] for a in attrs if a in self.data}
 
         # fetch 25 documents at a time, and bulk edit them in one call
-        documents = self.get_documents():
+        documents = self.get_documents()
         for page_documents in grouper(documents, BULK_LIMIT):
             try:
                 response = self.client.patch(
