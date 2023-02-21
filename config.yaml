@@ -21,3 +21,4 @@ properties:
   source:
     title: Source
     type: string
+version: 2
