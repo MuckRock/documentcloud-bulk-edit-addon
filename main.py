@@ -2,14 +2,14 @@
 This DocumentCloud Add-On allows you to bulk edit documents
 """
 
-from documentcloud.addon import AddOn
+from documentcloud.addon import AddOn, SoftTimeOutAddOn
 from documentcloud.exceptions import APIError
 from documentcloud.toolbox import grouper
 
 BULK_LIMIT = 25
 
 
-class BulkEdit(AddOn):
+class BulkEdit(SoftTimeOutAddOn):
     """Bulk edit DocumentCloud documents"""
 
     def main(self):
