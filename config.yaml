@@ -22,3 +22,5 @@ properties:
     title: Source
     type: string
 version: 2
+categories:
+  - bulk
