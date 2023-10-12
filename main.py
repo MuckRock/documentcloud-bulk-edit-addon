@@ -13,7 +13,10 @@ class BulkEdit(SoftTimeOutAddOn):
     """Bulk edit DocumentCloud documents"""
 
     def main(self):
-
+        if not self.documents:
+            self.set_message("Please select at least one document.")
+            return
+            
         attrs = ["source", "description", "related_article", "published_url"]
         data = {a: self.data[a] for a in attrs if a in self.data}
 
