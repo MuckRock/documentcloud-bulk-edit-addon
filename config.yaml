@@ -3,6 +3,7 @@ description: >-
   This will update document information for all documents in your current
   search.  Please be sure you have edit access to these documents before running
   this add-on.
+instructions: ''
 type: object
 documents:
   - query
