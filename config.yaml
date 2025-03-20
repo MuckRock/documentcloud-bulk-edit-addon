@@ -7,6 +7,7 @@ instructions: ''
 type: object
 documents:
   - query
+  - selected
 properties:
   description:
     title: Description
