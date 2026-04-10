@@ -2,7 +2,8 @@
 This DocumentCloud Add-On allows you to bulk edit documents
 """
 
-from documentcloud.addon import AddOn, SoftTimeOutAddOn
+import time
+from documentcloud.addon import SoftTimeOutAddOn
 from documentcloud.exceptions import APIError
 from documentcloud.toolbox import grouper
 
@@ -13,6 +14,7 @@ class BulkEdit(SoftTimeOutAddOn):
     """Bulk edit DocumentCloud documents"""
 
     def main(self):
+        """Main"""
         if self.get_document_count() is None:
             self.set_message("Please select at least one document.")
             return
@@ -23,12 +25,13 @@ class BulkEdit(SoftTimeOutAddOn):
         documents = self.get_documents()
         for page_documents in grouper(documents, BULK_LIMIT):
             try:
-                response = self.client.patch(
+                self.client.patch(
                     "documents/",
                     json=[
                         {"id": d.id, **data} for d in page_documents if d is not None
                     ],
                 )
+                time.sleep(10)
             except APIError as exc:
                 self.set_message(f"Error: {exc.error}")
                 raise
