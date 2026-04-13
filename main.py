@@ -15,6 +15,7 @@ class BulkEdit(SoftTimeOutAddOn):
 
     def main(self):
         """Main"""
+        self.client.session.headers.update({'User-Agent': 'Bulk Edit Add-On'})
         if self.get_document_count() is None:
             self.set_message("Please select at least one document.")
             return
